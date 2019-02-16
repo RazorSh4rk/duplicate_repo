@@ -26,6 +26,7 @@
   "permissions": [
     "https://github.com/*/*/issues/new",
     "https://httpbin.org/get",
+    "http://localhost:8081",
     "webRequest"
   ]
 

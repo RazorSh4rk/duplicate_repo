@@ -6,24 +6,26 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 import http.HttpUtils;
+import models.IssueModel;
+import lucene.TextUtils;
 
 import static spark.Spark.before;
-
-import Models.DataModel;
 
 public class API {
 	public API() {
 		port(8081);
-		setUpEndPoint();
+		setUpEndPoints();
 	}
 	
-	private void setUpEndPoint() {
+	private void setUpEndPoints() {
 		/* CORS */
 		options("/*", (request, response) -> {
 			String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
@@ -44,7 +46,6 @@ public class API {
 		/*  */
 
 		get("/ping", ((request, response) -> {
-			System.out.println("pinged");
 			return "pong";
 		}));
 		
@@ -54,28 +55,11 @@ public class API {
 					
 			JsonObject jsonObject = (parser.parse(request.body())).getAsJsonObject();
 			String URL = jsonObject.get("URL").toString();
-			String REPO = URL.replace("https://github.com/", "").replaceAll("\"", "");
+			String REPO = URL.replace("https://github.com/", "").replace("/issues/new", "").replaceAll("\"", "");
 			String TEXT = jsonObject.get("TEXT").toString();
 			
-			ArrayList<DataModel> ret = new ArrayList<DataModel>();
-			for(int i = 0; true; i++) {
-				String issues0 = "https://api.github.com/repos/";
-				String issues1 = "/issues?sort=comments&state=all&page=" + i;
-				
-				System.out.print(issues0 + REPO + issues1 + "\n result: ");
-				String res = HttpUtils.GET(issues0 + REPO + issues1);
-				System.out.println(res.length() + " bytes");
-				
-				if(res.length() < 100 || i > 9) break;
-				
-				JsonArray resJson = (parser.parse(res)).getAsJsonArray();
-				JsonObject resObj = (parser.parse(resJson.get(3).toString())).getAsJsonObject();
-				//TODO modularize this
-				ret.add(new DataModel( resObj.get("url").toString(), resObj.get("title").toString(), resObj.get("body").toString() ) );
-			}
-			String e = "";
-			for(DataModel i : ret) { e += i.toString(); }
-			return e;
+			List<IssueModel> allIssues = HttpUtils.getAllIssues(parser, REPO);
+			return new Gson().toJson(new TextUtils().getSimilarResults(TEXT, allIssues));
 		}));
 	}
 }

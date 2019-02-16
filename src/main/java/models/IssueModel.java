@@ -1,8 +1,8 @@
-package Models;
+package models;
 
-public class DataModel {
+public class IssueModel {
 	public String URL, title, body;
-	public DataModel(String u, String t, String b) {
+	public IssueModel(String u, String t, String b) {
 		URL = u;
 		title = t;
 		body = b;
