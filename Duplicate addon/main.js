@@ -1,80 +1,53 @@
 let title = document.getElementById('issue_title'),
-	body = document.getElementById('issue_title')
+	body = document.getElementById('issue_title'),
+	ctx = document.getElementsByClassName('form-actions')[0],
+	footer = document.getElementsByClassName('timeline-comment-wrapper timeline-new-comment composer')[0],
+	resAdded = false
 
-let ioService = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService)
-let uri = ioService.newURI('http://localhost:8081/ping/', null, null)
-let channel = ioService.newChannelFromURI(uri)
+const btnInject = '<p id="duplicate-button" \
+					class="btn btn-primary" \
+					style="float:right"> \
+					Check for duplicates</p>'
 
-let listener = new StreamListener(function(data) { alert(data) })
-
-channel.notificationCallbacks = listener
-channel.asyncOpen(listener, null)
-
-function StreamListener(aCallbackFunc) {
-  this.mCallbackFunc = aCallbackFunc
+function resultInject(res){
+	resAdded = true
+	return '<p id="duplicate-results" \
+			 style="width: 100%; \
+			height: 200px; background: \
+			lightgrey; border-radius: 5px; \
+			padding: 10px;">'
+			+ res.origin +
+			'</p>'
 }
 
-StreamListener.prototype = {
-  mData: "",
+console.log('extension fired')
+ctx.innerHTML += btnInject
 
-  // nsIStreamListener
-  onStartRequest: function (aRequest, aContext) {
-    this.mData = "";
-  },
+window.addEventListener('click', function(e){
+	if(e.target.id == 'duplicate-button'){
+		req()
+	}
+})
 
-  onDataAvailable: function (aRequest, aContext, aStream, aSourceOffset, aLength) {
-    var scriptableInputStream = 
-      Components.classes["@mozilla.org/scriptableinputstream;1"]
-        .createInstance(Components.interfaces.nsIScriptableInputStream);
-    scriptableInputStream.init(aStream);
-
-    this.mData += scriptableInputStream.read(aLength);
-  },
-
-  onStopRequest: function (aRequest, aContext, aStatus) {
-    if (Components.isSuccessCode(aStatus)) {
-      // request was successfull
-      this.mCallbackFunc(this.mData);
-    } else {
-      // request failed
-      this.mCallbackFunc(null);
-    }
-
-    gChannel = null;
-  },
-
-  // nsIChannelEventSink
-  onChannelRedirect: function (aOldChannel, aNewChannel, aFlags) {
-    // if redirecting, store the new channel
-    gChannel = aNewChannel;
-  },
-
-  // nsIInterfaceRequestor
-  getInterface: function (aIID) {
-    try {
-      return this.QueryInterface(aIID);
-    } catch (e) {
-      throw Components.results.NS_NOINTERFACE;
-    }
-  },
-
-  // nsIProgressEventSink (not implementing will cause annoying exceptions)
-  onProgress : function (aRequest, aContext, aProgress, aProgressMax) { },
-  onStatus : function (aRequest, aContext, aStatus, aStatusArg) { },
-
-  // nsIHttpEventSink (not implementing will cause annoying exceptions)
-  onRedirect : function (aOldChannel, aNewChannel) { },
-
-  // we are faking an XPCOM interface, so we need to implement QI
-  QueryInterface : function(aIID) {
-    if (aIID.equals(Components.interfaces.nsISupports) ||
-        aIID.equals(Components.interfaces.nsIInterfaceRequestor) ||
-        aIID.equals(Components.interfaces.nsIChannelEventSink) || 
-        aIID.equals(Components.interfaces.nsIProgressEventSink) ||
-        aIID.equals(Components.interfaces.nsIHttpEventSink) ||
-        aIID.equals(Components.interfaces.nsIStreamListener))
-      return this;
-
-    throw Components.results.NS_NOINTERFACE;
-  }
-};
+function req(){
+	let t = title.value
+	let b = body.value
+	if(t.length != 0 && b.length != 0){
+		fetch('https://httpbin.org/get')
+			.then((resp) => resp.json())
+			.then((res) => {
+				if(!resAdded)
+					footer.innerHTML += resultInject(res)
+				else
+					document.getElementById('duplicate-results')
+						.innerHTML = res.origin
+			})
+	}else{
+		if(!resAdded)
+			footer.innerHTML += 
+				resultInject('gimme something to work with')
+		else
+			document.getElementById('duplicate-results')
+				.innerHTML = 'gimme something to work with'
+	}
+}
