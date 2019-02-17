@@ -65,7 +65,9 @@ public class HttpUtils {
 			JsonObject resObj = (parser.parse(resJson.get(3).toString())).getAsJsonObject();
 			for(JsonElement je : resJson) {
 				JsonObject jo = parser.parse(je.toString()).getAsJsonObject();
-				ret.add( new IssueModel(jo.get("url").toString(), jo.get("title").toString(), jo.get("body").toString()) );
+				String u = jo.get("url").toString().replace("/api", "").replace("/repos", "");
+				System.out.println(u);
+				ret.add( new IssueModel(u, jo.get("title").toString(), jo.get("body").toString()) );
 			}
 		}
 		

@@ -1,5 +1,4 @@
-let title = document.getElementById('issue_title'),
-	body = document.getElementById('issue_title'),
+/*let body = document.getElementById('issue_body'),
 	ctx = document.getElementsByClassName('form-actions')[0],
 	footer = document.getElementsByClassName('timeline-comment-wrapper timeline-new-comment composer')[0],
 	resAdded = false
@@ -30,12 +29,18 @@ window.addEventListener('click', function(e){
 })
 
 function req(){
-	let t = title.value
 	let b = body.value
-	if(t.length != 0 && b.length != 0){
-		fetch('https://httpbin.org/get')
+	if(b.length != 0){
+		fetch('http://localhost:8081/detect', {
+		        method: "POST",
+		        body: JSON.stringify({
+		        	"URL" : window.location,
+		        	"TEXT" : b
+		        })
+		    })
 			.then((resp) => resp.json())
 			.then((res) => {
+				console.log(res)
 				if(!resAdded)
 					footer.innerHTML += resultInject(res)
 				else
@@ -51,3 +56,6 @@ function req(){
 				.innerHTML = 'gimme something to work with'
 	}
 }
+*/
+window.open('http://localhost:8081/ping')
+//let a = browser.runtime.getURL('/test.html'))

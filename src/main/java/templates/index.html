@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Duplicate results</title>
+	 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css">
+<body>
+<p id="res"></p>
+<script>
+
+	let data = JSON.stringify({
+		'URL': '$$url',
+		'TEXT': '$$text'
+	})
+	fetch('http://localhost:8081/detect', {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrer: 'no-referrer',
+        body: data
+    })
+    .then(response => response.json())
+    .then(res => {
+
+    	let tx = '<div class="alert alert-success">We found some issues that might be related:</div>'
+
+		let template = '<div class="card" style="width: 20rem;"><class="card-body">\
+						<h4 class="card-title"><a href="&url"> &title </a></h4>\
+						<p class="card-text"> &body </p>\
+						</div></div>'
+
+    	for(el of res){
+    		let u = el.URL.replace(/"/g, '').replace('.github', 'github')
+    		document.getElementById('res').innerHTML += tx + 
+    													template
+											    		.replace('&url', u)
+											    		.replace('&title', el.title)
+											    		.replace('&body', el.body)
+    	}
+    })
+
+</script>
+</body>
+</html>
