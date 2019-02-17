@@ -20,6 +20,9 @@ import com.google.gson.JsonParser;
 import models.IssueModel;
 
 public class HttpUtils {
+	
+	private static int API_HITS_ALLOWED = 0;
+	
 	public static String GET(String URL){
         String responseBody = "";
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -59,10 +62,11 @@ public class HttpUtils {
 			String res = HttpUtils.GET(issues0 + REPO + issues1);
 			System.out.println(res.length() + " bytes");
 			
-			if(res.length() < 100 || i > 1) break;
+			if(res.length() < 100 || i > API_HITS_ALLOWED) break;
+			//limited to 60/h without auth
 			
 			JsonArray resJson = (parser.parse(res)).getAsJsonArray();
-			JsonObject resObj = (parser.parse(resJson.get(3).toString())).getAsJsonObject();
+		
 			for(JsonElement je : resJson) {
 				JsonObject jo = parser.parse(je.toString()).getAsJsonObject();
 				String u = jo.get("url").toString().replace("/api", "").replace("/repos", "");

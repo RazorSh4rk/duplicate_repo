@@ -57,5 +57,5 @@ function req(){
 	}
 }
 */
-window.open('http://localhost:8081/ping')
+window.open('http://localhost:8081/results?url=https://github.com/mrdoob/three.js/issues/new&text=I%20dislike%20this%20one%20more%20then')
 //let a = browser.runtime.getURL('/test.html'))

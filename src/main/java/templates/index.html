@@ -3,6 +3,16 @@
 <head>
 	<title>Duplicate results</title>
 	 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css">
+	 <style>
+	 	.box{
+	 		position: relative;
+	 		float: left;
+	 		margin-right: 1vw;
+	 	}
+	 	.c{
+	 		text-align: center;
+	 	}
+	 </style>
 <body>
 <p id="res"></p>
 <script>
@@ -26,17 +36,17 @@
     .then(response => response.json())
     .then(res => {
 
-    	let tx = '<div class="alert alert-success">We found some issues that might be related:</div>'
+    	let tx = '<div class="alert alert-success c">We found some issues that might be related:</div>'
 
-		let template = '<div class="card" style="width: 20rem;"><class="card-body">\
-						<h4 class="card-title"><a href="&url"> &title </a></h4>\
+		let template = '<div class="card box" style="width: 20rem;"><class="card-body">\
+						<h4 class="card-title"><a href="&url" target="_blank"> &title </a></h4>\
 						<p class="card-text"> &body </p>\
 						</div></div>'
 
+		document.getElementById('res').innerHTML += tx
     	for(el of res){
     		let u = el.URL.replace(/"/g, '').replace('.github', 'github')
-    		document.getElementById('res').innerHTML += tx + 
-    													template
+    		document.getElementById('res').innerHTML += template
 											    		.replace('&url', u)
 											    		.replace('&title', el.title)
 											    		.replace('&body', el.body)
