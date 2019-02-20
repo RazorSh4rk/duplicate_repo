@@ -1,0 +1,7 @@
+https://stackoverflow.com/questions/33762898/how-to-obtain-the-cosine-similarity-with-lucene
+https://stackoverflow.com/questions/1844194/get-cosine-similarity-between-two-documents-in-lucene/16991131#16991131
+https://stackoverflow.com/questions/16203118/how-can-i-implement-the-tf-idf-and-cosine-similarity-in-lucene
+https://stackoverflow.com/questions/10173202/how-to-calculate-cosine-similarity-with-tf-idf-using-lucene-and-java?rq=1
+http://lucene.apache.org/core/4_0_0/core/org/apache/lucene/search/similarities/DefaultSimilarity.html
+http://lucene.apache.org/core/3_0_3/api/core/org/apache/lucene/search/Similarity.html
+https://howtodoinjava.com/lucene/lucene-ramdirectory-example/

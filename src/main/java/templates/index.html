@@ -43,13 +43,16 @@
 						<p class="card-text"> &body </p>\
 						</div></div>'
 
+		let uniq = Array.from(new Set(res))
+
 		document.getElementById('res').innerHTML += tx
-    	for(el of res){
+    	for(el of uniq){
     		let u = el.URL.replace(/"/g, '').replace('.github', 'github')
+    		let b = el.body.replace(/\\n/g, '').replace(/\\t/g, '').replace(/\\r/g, '').substring(0, 300)
     		document.getElementById('res').innerHTML += template
 											    		.replace('&url', u)
 											    		.replace('&title', el.title)
-											    		.replace('&body', el.body)
+											    		.replace('&body', b)
     	}
     })
 

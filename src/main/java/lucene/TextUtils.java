@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.IssueModel;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -24,6 +22,10 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.RAMDirectory;
 
+import com.google.gson.Gson;
+
+import models.IssueModel;
+
 public class TextUtils {
 	
 	public TextUtils() {
@@ -33,6 +35,8 @@ public class TextUtils {
 	public List<IssueModel> getSimilarResults(String newIssue, List<IssueModel> issues) {
 		RAMDirectory ramDir = new RAMDirectory();
 		Analyzer analyzer = new StandardAnalyzer();
+		
+		System.out.println("Indexing " + new Gson().toJson(issues));
 
 		writeIndex(ramDir, analyzer, issues);
 		return searchIndex(ramDir, analyzer, newIssue);
@@ -45,8 +49,8 @@ public class TextUtils {
 			IndexWriter writer = new IndexWriter(ramDir, iwc);
 
 			for(IssueModel m : models) {
-				System.out.println("Writing " + m.title + " " + m.body);
-				indexDoc(writer, m.title, m.body, m.URL);
+				System.out.println("Writing " + m.getTitle() + " " + m.getBody());
+				indexDoc(writer, m.getTitle(), m.getBody(), m.getURL());
 			}
 
 			writer.close();
@@ -67,6 +71,10 @@ public class TextUtils {
 		IndexReader reader = null;
 		List<IssueModel> ret = new ArrayList<IssueModel>();
 		try {
+			//lsi
+			//python gensim
+			//word embedding
+			//stopword filter
 			reader = DirectoryReader.open(ramDir);
 			IndexSearcher searcher = new IndexSearcher(reader);
 
