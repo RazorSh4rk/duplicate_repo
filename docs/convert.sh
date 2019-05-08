@@ -1,0 +1,1 @@
+pandoc -o out.docx -f markdown -t docx doc.md
