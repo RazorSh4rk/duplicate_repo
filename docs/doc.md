@@ -59,9 +59,9 @@
 
   ## Jövőbeli fejlesztések
 
-    ### Github account login
+    * Github account login
 
-    ### AI?
+    * AI?
 
 # Irodalomjegyzék
 
