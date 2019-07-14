@@ -43,7 +43,23 @@
 
   ## Lucene
 
+  Az Apache Lucene egy open source, szövegkereső engine. Az Apache Software Foundation áll mögötte, ami a világ legnagyobb
+  open source alapítványa, olyan szoftverek készítője, mint a Tomcat és a CouchDB. A teljes szoftver Java nyelven íródott, 
+  cross platform teljes szövegkeresést ígér, minimális lábnyommal.
+
+  Több funkcióval is rendelkezik, mint a 
+  
+  	* Szöveg indexelése
+  		- 1MB heap használatával
+  		- akár 150GB/óra adatot
+  	* Beépített keresőalgoritmusok
+  		- query támogatás
+  		- elgépelés kiszűrése
+  		- mező alapú keresés
+
   ## Word indexing
+
+  Legfontosabb számunkra jelenleg a Lucene funkcióiból a szóindexelés.
 
   ## Matek
 
